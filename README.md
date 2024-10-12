@@ -50,13 +50,10 @@ func main() {
 	var degrees float32
 	var scale string
 
-	fmt.Println("Введите шкалу (c - для цельсия, f - для фаренгейтов): ")
-	fmt.Scan(&scale)
+	fmt.Println("Введите температуру (c - для цельсия, f - для фаренгейтов): ")
+	fmt.Scan(&degrees, &scale)	
 
-	fmt.Println("Введите значение градусов: ")
-	fmt.Scan(&degrees)
-
-  //map - это таблица которая позволяет связывать ключи со значениями. В данном случае используется для 
+	//map - это таблица которая позволяет связывать ключи со значениями. В данном случае используется для 
 	//вызыва методов в зависимости от введенных данных
 	converters := map[string]func(float32) float32{
 		"c": toFahrenheit,
@@ -71,7 +68,7 @@ func main() {
 	converter := converters[scale]
 	result := converter(degrees)
 	scaleResult := resultScales[scale]
-	
+
 	fmt.Printf("Результат: %.2f градусов по %s\n", result, scaleResult)
 }
 ```
@@ -109,7 +106,7 @@ func main() {
 	//Позволяет считать целую строку
 	reader := bufio.NewReader(os.Stdin)
 
-	fmt.Println("Введите два слова: ")
+	fmt.Println("Введите два предложения: ")
 
 	//_ — символ подчеркивания, который позволяет игнорировать возвращенное значение ошибки (error). 
 	sentence1, _ = reader.ReadString('\n')
@@ -125,6 +122,26 @@ func main() {
 ```
 5. Напишите программу, которая вычисляет расстояние между двумя точками в 2D пространстве.
    Листинг:
+```
+package main
+
+import "fmt"
+import "math"
+
+func main() {
+    var x1, x2, y1, y2, result float64
+
+    fmt.Println("Введите координаты первой точки: ")
+    fmt.Scan(&x1, &y1)
+
+    fmt.Println("Введите координаты второй точки: ")
+    fmt.Scan(&x2, &y2)
+
+    result = math.Sqrt(math.Abs(math.Pow((x2-x1), 2) + math.Pow((y2-y1), 2)))
+
+    fmt.Printf("Расстояние равно: %.4f\n", result)
+}
+```
 ### 2. Задачи с условным оператором
 1. Напишите программу, которая проверяет, является ли введенное число четным или нечетным.
    Листинг:
