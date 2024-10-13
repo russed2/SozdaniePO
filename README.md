@@ -145,22 +145,262 @@ func main() {
 ### 2. Задачи с условным оператором
 1. Напишите программу, которая проверяет, является ли введенное число четным или нечетным.
    Листинг:
+```
+package main
+
+import "fmt"
+
+func main() {
+	var num int
+
+	fmt.Println("Введите число:")
+	fmt.Scan(&num)
+
+	if num % 2 == 0 {
+		fmt.Println("Четное")
+	}else {
+		fmt.Println("Не четное")
+	}
+}
+```
 2. Напишите программу, которая проверяет, является ли введенный год високосным.
    Листинг:
+```
+package main
+
+import "fmt"
+
+func main() {
+	var year int
+
+	fmt.Println("Введите год:")
+	fmt.Scan(&year)
+
+	if (year % 4 == 0 && year % 100 != 0) || year % 400 == 0 {
+		fmt.Println("Високосный")
+	}else {
+		fmt.Println("Не високосный")
+	}
+}
+```
 3. Напишите программу, которая принимает три числа и выводит наибольшее из них.
    Листинг:
+```
+package main
+
+import "fmt"
+
+func main() {
+	var x1, x2, x3 int
+
+	fmt.Println("Введите 3 числа:")
+	fmt.Scan(&x1, &x2, &x3)
+
+	if x1 > x2 {
+		if x1 > x3 {
+			fmt.Println(x1)
+		}else {
+			fmt.Println(x3)
+		}
+	}else {
+		if x2 > x3 {
+			fmt.Println(x2)
+		}else {
+			fmt.Println(x3)
+		}
+	}
+}
+```
 4. Напишите программу, которая принимает возраст человека и выводит, к какой возрастной группе он относится (ребенок, подросток, взрослый, пожилой. В комментариях указать возрастные рамки).
    Листинг:
+```
+//ребенок 0 - 12, подросток 13 - 21, взрослый 22 - 59, пожилой >60
+package main
+
+import "fmt"
+
+func main() {
+	var year int
+
+	fmt.Println("Введите возраст:")
+	fmt.Scan(&year)
+
+	switch {
+	case year <= 12:
+		fmt.Println("Ребенок")
+
+	case year > 12 && year < 22:
+		fmt.Println("Подросток")
+
+	case year > 21 && year < 60:
+		fmt.Println("Взрослый")
+
+	case year >= 60:
+		fmt.Println("Пожилой")
+	}
+}
+```
 5. Напишите программу, которая проверяет, делится ли число одновременно на 3 и 5.
    Листинг:
+```
+package main
+
+import "fmt"
+
+func main() {
+	var num int
+
+	fmt.Println("Введите число:")
+	fmt.Scan(&num)
+
+	if num % 3 == 0 && num % 5 == 0 {
+		fmt.Println("Делится")
+	}else {
+		fmt.Println("Не делится")
+	}
+}
+```
 ### 3. Задачи на циклы
 1. Напишите программу, которая вычисляет факториал числа.
    Листинг:
+```
+package main
+
+import "fmt"
+
+func main() {
+	var num int
+	var result = 1
+
+	fmt.Printf("Введите число: ")
+	fmt.Scan(&num)
+
+	for ; num > 0; num-- {
+		result *= num
+	}
+
+	fmt.Println("Факториал равен:", result)
+}
+```
 2. Напишите программу, которая выводит первые `n` чисел Фибоначчи.
    Листинг:
+```
+package main
+
+import "fmt"
+
+func main() {
+	var n int
+
+	fmt.Println("Введите количество чисел Фибоначчи:")
+	fmt.Scan(&n)
+
+	fib := make([]int, n)
+		if n > 0 {
+   			fib[0] = 0
+		}
+		if n > 1 {
+   			fib[1] = 1
+		}
+
+	for i := 2; i < n; i++ {
+    	fib[i] = fib[i-1] + fib[i-2]
+	}
+
+	fmt.Println("Первые", n, "чисел Фибоначчи:", fib)
+}
+```
 3. Напишите программу, которая переворачивает массив чисел.
    Листинг:
+```
+package main
+
+import "fmt"
+import "math/rand"
+
+func main() {
+	var n int
+
+	fmt.Println("Введите количество элементов в массиве: ")
+	fmt.Scan(&n)
+
+	array := make([]int, n)
+	array1 := make([]int, n)
+
+	for i := 0; i < n; i++ {
+		array[i] = rand.Intn(20)
+	}
+
+	fmt.Println("Начальный массив: ", array)
+
+	n1 := n - 1
+
+	for i := 0; i < n; i++ {
+		array1[i] = array[n1]
+		n1--
+	}
+
+	fmt.Println("Конечный массив: ", array1)
+}
+```
 4. Напишите программу, которая выводит все простые числа до заданного числа.
    Листинг:
+```
+package main
+
+import "fmt"
+
+func getPrimes(limit int) []int {
+    primes := []int{}
+    for i := 2; i < limit; i++ {
+        if isPrime(i) {
+            primes = append(primes, i)
+        }
+    }
+    return primes
+}
+
+func isPrime(num int) bool {
+    for i := 2; i*i <= num; i++ {
+        if num % i == 0 {
+            return false
+        }
+    }
+    return true
+}
+
+func main() {
+    var n int
+	
+    fmt.Println("Введите число для поиска всех простых чисел до него:")
+    fmt.Scan(&n)
+
+    primes := getPrimes(n)
+    fmt.Println("Простые числа", primes)
+}
+```
 5. Напишите программу, которая вычисляет сумму всех чисел в массиве.
    Листинг:
+```
+package main
+
+import "fmt"
+import "math/rand"
+
+func main() {
+	var n, sum int
+
+	fmt.Println("Введите количество элементов в массиве: ")
+	fmt.Scan(&n)
+
+	array := make([]int, n)
+
+	for i := 0; i < n; i++ {
+		array[i] = rand.Intn(10)
+		sum += array[i]
+	}
+
+	fmt.Println("Начальный массив: ", array)
+	fmt.Println("Сумма его чисел:", sum)
+}
+```
