@@ -374,15 +374,190 @@ func main() {
    - Мёртвая клетка с тремя живыми соседями оживает.
    Используйте циклы для обработки клеток. Листинг:
 ```
+package main
 
+import (
+	"bufio"
+	"fmt"
+	"os"
+)
+
+func createMatrix(matrixSize int) [][]int {
+
+	matrix := make([][]int, matrixSize)
+
+	for i := range matrix {
+		matrix[i] = make([]int, matrixSize)
+	}
+
+	return matrix
+}
+
+func getAliveNeighbours(x int, y int, matrix [][]int) int {
+	result := 0
+	for neighbourX := x - 1; neighbourX <= x+1; neighbourX++ {
+		for neighbourY := y - 1; neighbourY <= y+1; neighbourY++ {
+			if neighbourX < 0 || neighbourY < 0 || neighbourX >= len(matrix) ||
+				neighbourY >= len(matrix[0]) || (neighbourX == x && neighbourY == y) {
+				continue
+			}
+			if matrix[neighbourX][neighbourY] == 1 {
+				result++
+			}
+		}
+	}
+
+	return result
+}
+
+func showMatrix(matrix [][]int) {
+	for _, line := range matrix {
+		fmt.Println(line)
+	}
+}
+
+func makeStep(matrixSize int, matrix [][]int) [][]int {
+	result := createMatrix(matrixSize)
+	for x, line := range matrix {
+		for y, cell := range line {
+			result[x][y] = matrix[x][y]
+			aliveNeighbours := getAliveNeighbours(x, y, matrix)
+			if cell == 1 && !(aliveNeighbours == 3 || aliveNeighbours == 2) {
+				result[x][y] = 0
+				continue
+			}
+
+			if cell == 0 && aliveNeighbours == 3 {
+				result[x][y] = 1
+				continue
+			}
+		}
+	}
+
+	return result
+}
+func main() {
+
+	const fieldSize = 10
+
+	matrix := createMatrix(fieldSize)
+
+	matrix[1][4] = 1
+	matrix[2][2] = 1
+	matrix[2][4] = 1
+	matrix[3][3] = 1
+	matrix[3][4] = 1
+
+	for true {
+
+		showMatrix(matrix)
+
+		fmt.Println("Нажмите любую кнопку для продолжения")
+		bufio.NewScanner(os.Stdin).Scan()
+
+		matrix = makeStep(fieldSize, matrix)
+	}
+}
 ```
 14. **Цифровой корень числа**  
    Напишите программу, которая вычисляет цифровой корень числа. Цифровой корень — это рекурсивная сумма цифр числа, пока не останется только одна цифра. Например, цифровой корень числа 9875 равен 2, потому что 9+8+7+5=29 → 2+9=11 → 1+1=2. Листинг:
 ```
+package main
 
+import (
+	"fmt"
+)
+
+func digitsSqrt(number int) int {
+
+	currentNum := 0
+	for ok := true; ok; ok = (number/10 != 0) {
+		for ; number > 0; number /= 10 {
+			currentNum += number % 10
+		}
+
+		number = currentNum
+		currentNum = 0
+	}
+
+	return number
+}
+
+func main() {
+
+	var num int
+	fmt.Println("Введите число:")
+	fmt.Scan(&num)
+
+	fmt.Print(digitsSqrt(num))
+}
 ```
 15. **Римские цифры**  
    Напишите функцию, которая преобразует арабское число (например, 1994) в римское (например, "MCMXCIV"). Программа должна использовать циклы и условные операторы для создания римской записи. Листинг:
 ```
+package main
 
+import (
+	"fmt"
+	"sort"
+)
+
+func createRomanMapAndKeyList() (map[int]string, []int) {
+	romanMap := map[int]string{
+		1:    "I",
+		4:    "IV",
+		5:    "V",
+		9:    "IX",
+		10:   "X",
+		40:   "XL",
+		50:   "L",
+		90:   "XC",
+		100:  "C",
+		400:  "CD",
+		500:  "D",
+		900:  "CM",
+		1000: "M",
+	}
+
+	keys := make([]int, 0, len(romanMap))
+	for k := range romanMap {
+		keys = append(keys, k)
+	}
+	sort.Ints(keys)
+
+	for i := 0; i < len(keys)/2; i++ {
+		temp := keys[i]
+		keys[i] = keys[len(keys)-1-i]
+		keys[len(keys)-1-i] = temp
+	}
+
+	return romanMap, keys
+}
+
+func toRomanNumbers(number int) string {
+
+	romanMap, keys := createRomanMapAndKeyList()
+
+	result := ""
+
+	for number > 0 {
+		for _, key := range keys {
+			for number/key != 0 {
+				result += romanMap[key]
+				number -= key
+			}
+		}
+	}
+
+	return result
+}
+
+func main() {
+
+	var num int
+	fmt.Println("Введите число:")
+	fmt.Scan(&num)
+
+	fmt.Print(toRomanNumbers(num))
+}
 ```
