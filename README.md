@@ -13,16 +13,18 @@ import (
     "net/http"
 )
 
-type Book struct {
+type Film struct {
     ID     string `json:"id"`
     Title  string `json:"title"`
-    Author string `json:"author"`
+    Writer string `json:"writer"`
+	Director string `json:"director"`
+	Year string `json:"year"`
 }
 
-var books = []Book{
-    {ID: "1", Title: "1984", Author: "George Orwell"},
-    {ID: "2", Title: "Brave New World", Author: "Aldous Huxley"},
-    {ID: "3", Title: "Fahrenheit 451", Author: "Ray Bradbury"},
+var films = []Film{
+    {ID: "1", Title: "The Boondock Saints", Writer: "Troy Duffy", Director: "Troy Duffy", Year: "1999"},
+    {ID: "2", Title: "Blade", Writer: "David S. Goyer", Director: "Stephen Norrington", Year: "1998"},
+    {ID: "3", Title: "Gladiator", Writer: "John Logan", Director: "Ridley Scott", Year: "2000"},
 }
 
 func main() {
@@ -36,91 +38,97 @@ func main() {
         })
     })
 
-	// Получение всех книг
-    router.GET("/books", getBooks)
+	// Получение всех фильмов
+    router.GET("/films", getFilms)
 
-    // Получение книги по ID
-    router.GET("/books/:id", getBookByID)
+    // Получение фильма по ID
+    router.GET("/films/:id", getFilmByID)
 
-    // Создание новой книги
-    router.POST("/books", createBook)
+    // Создание нового фильма
+    router.POST("/films", createFilm)
 
-    // Обновление существующей книги
-    router.PUT("/books/:id", updateBook)
+    // Обновление существующего фильма
+    router.PUT("/films/:id", updateFilm)
 
-    // Удаление книги
-    router.DELETE("/books/:id", deleteBook)
+    // Удаление фильма
+    router.DELETE("/films/:id", deleteFilm)
 
     // Запускаем сервер на порту 8080
     router.Run(":8080")
 }
 
-func getBooks(c *gin.Context) {
-    c.JSON(http.StatusOK, books)
+func getFilms(c *gin.Context) {
+    c.JSON(http.StatusOK, films)
 }
 
-func getBookByID(c *gin.Context) {
+func getFilmByID(c *gin.Context) {
     id := c.Param("id")
 
-    for _, book := range books {
-        if book.ID == id {
-            c.JSON(http.StatusOK, book)
+    for _, film := range films {
+        if film.ID == id {
+            c.JSON(http.StatusOK, film)
             return
         }
     }
 
-    c.JSON(http.StatusNotFound, gin.H{"message": "book not found"})
+    c.JSON(http.StatusNotFound, gin.H{"message": "film not found"})
 }
 
-func createBook(c *gin.Context) {
-    var newBook Book
+func createFilm(c *gin.Context) {
+    var newFilm Film
 
-    if err := c.BindJSON(&newBook); err != nil {
+    if err := c.BindJSON(&newFilm); err != nil {
         c.JSON(http.StatusBadRequest, gin.H{"message": "invalid request"})
         return
     }
 
-    books = append(books, newBook)
-    c.JSON(http.StatusCreated, newBook)
+    films = append(films, newFilm)
+    c.JSON(http.StatusCreated, newFilm)
 }
 
-func updateBook(c *gin.Context) {
+func updateFilm(c *gin.Context) {
     id := c.Param("id")
-    var updatedBook Book
+    var updatedFilm Film
 
-    if err := c.BindJSON(&updatedBook); err != nil {
+    if err := c.BindJSON(&updatedFilm); err != nil {
         c.JSON(http.StatusBadRequest, gin.H{"message": "invalid request"})
         return
     }
 
-    for i, book := range books {
-        if book.ID == id {
-            books[i] = updatedBook
-            c.JSON(http.StatusOK, updatedBook)
+    for i, film := range films {
+        if film.ID == id {
+            films[i] = updatedFilm
+            c.JSON(http.StatusOK, updatedFilm)
             return
         }
     }
 
-    c.JSON(http.StatusNotFound, gin.H{"message": "book not found"})
+    c.JSON(http.StatusNotFound, gin.H{"message": "film not found"})
 }
 
-func deleteBook(c *gin.Context) {
+func deleteFilm(c *gin.Context) {
     id := c.Param("id")
 
-    for i, book := range books {
-        if book.ID == id {
-            books = append(books[:i], books[i+1:]...)
-            c.JSON(http.StatusOK, gin.H{"message": "book deleted"})
+    for i, film := range films {
+        if film.ID == id {
+            films = append(films[:i], films[i+1:]...)
+            c.JSON(http.StatusOK, gin.H{"message": "film deleted"})
             return
         }
     }
 
-    c.JSON(http.StatusNotFound, gin.H{"message": "book not found"})
+    c.JSON(http.StatusNotFound, gin.H{"message": "film not found"})
 }
 ```
-### 3. Проверка операций и подключения к серверу через POSTMAN
-#### 3.1 GET /books — получение списка всех книг.
-#### 3.2 GET /books/:id — получение информации о книге по её ID.
-#### 3.3 POST /books — добавление новой книги.
-#### 3.4 PUT /books/:id — обновление информации о книге по её ID.
-#### 3.5 DELETE /books/:id — удаление книги по её ID.
+### 3. Проверка операций и подключения к серверу через POSTMAN:
+#### 3.1 GET /films — получение списка всех фильмов.
+![image](https://github.com/user-attachments/assets/702a5e20-a042-4c51-b19e-58ad1c81b00e)
+#### 3.2 GET /films/:id — получение информации о фильме по его ID.
+![image](https://github.com/user-attachments/assets/9bba3a1b-6e8c-4acf-9f2e-37ed8af417a3)
+#### 3.3 POST /films — добавление нового фильма.
+![image](https://github.com/user-attachments/assets/09ead160-6f8a-43f3-a3bf-2367b85ead12)
+#### 3.4 PUT /films/:id — обновление информации о фильме по его ID.
+![image](https://github.com/user-attachments/assets/932aed2f-59fb-4016-b77e-692f486785f1)
+![image](https://github.com/user-attachments/assets/42e6693a-fe01-4b21-a80d-b66327b6b371)
+#### 3.5 DELETE /films/:id — удаление фильма по его ID.
+![image](https://github.com/user-attachments/assets/f7777451-a6a1-4ae4-be6d-a4d1604f77b3)
