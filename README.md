@@ -184,7 +184,7 @@ func main() {
     router := gin.Default()
 
     router.POST("/login", login)
-	router.POST("/register", signup)
+	router.POST("/register", register)
 	router.POST("/refresh", refresh)
 
     protected := router.Group("/")
@@ -202,4 +202,19 @@ func main() {
 }
 ```
 ### 4 Проверим работоспособность кода:
-#### 4.1 Вход под обычным пользователем:
+#### 4.1 Регистрация обычного пользователя:
+![image](https://github.com/user-attachments/assets/39bc26c5-4b72-4d37-9046-ca1c8bd3d421)
+#### 4.2 Вход под новым пользователем:
+![image](https://github.com/user-attachments/assets/73d94aba-72ea-49c2-ab8f-78d1202cf483)
+#### 4.3 Вход под новым пользователем c неправильным паролем:
+![image](https://github.com/user-attachments/assets/71a88c06-e207-405e-bbf9-5bc574a36e7b)
+#### 4.4 Получения списка фильмов:
+![image](https://github.com/user-attachments/assets/57580f0e-c7af-430b-af09-16ecd341a310)
+#### 4.5 Попытка удаления фильма под обычным пользователем:
+![image](https://github.com/user-attachments/assets/6c941a15-0ce4-4a79-8c98-0a22350706a0)
+#### 4.6 Вход под админом:
+![image](https://github.com/user-attachments/assets/5da28948-78ca-4013-aec8-95c4d9c61817)
+#### 4.7 Попытка удаления фильма под админом:
+![image](https://github.com/user-attachments/assets/31ad18e4-6350-49c4-8203-57a7f053ccab)
+#### 4.8 Проверка удаления:
+![image](https://github.com/user-attachments/assets/1663fd43-dc87-4198-a5c8-e7fafae10ed7)
